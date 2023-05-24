@@ -7,7 +7,7 @@ export const cookieOptions = {
     httpOnly: true
 }
 
-export const signUp = asyncHandler( async(res,req)=> {
+export const signUp = asyncHandler( async(req,res)=> {
     const { name, email, password } = req.body
 
     if (!name || !email || !password) {
@@ -36,7 +36,7 @@ export const signUp = asyncHandler( async(res,req)=> {
     })
 })
 
-export const login = asyncHandler( async(res, req) => {
+export const login = asyncHandler( async(req, res) => {
     const { email, password } = req.body
 
     if(!email || !password){
