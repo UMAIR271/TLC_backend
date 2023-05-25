@@ -3,6 +3,7 @@ import cors from "cors"
 import cookieParser from "cookie-parser"
 import routes from "./routes/index.js"
 
+
 const app = express()
 
 app.use(express.json())
@@ -22,5 +23,6 @@ app.all("*", (_req, res) => {
         message: "Route not found"
     })
 })
+
 
 export default app;

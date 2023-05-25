@@ -1,12 +1,8 @@
-const asyncHandler = (fn) => async (req, res, next) => {
-    try {
-        await fn(req, res, next)
-    } catch (error) {
-        res.status(error.code || 500).json({
-            success: false,
-            message: error.message
-        })
+class CustomError extends Error{
+    constructor(message,code){
+        super(message);
+        this.code = code
     }
 }
 
-export default asyncHandler;
+export default CustomError
