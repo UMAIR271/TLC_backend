@@ -1,6 +1,6 @@
 import Collection from '../models/collection.schema.js';
 import asyncHandler from '../services/asyncHandler.js';
-import CustomError from '../services/customError.js';
+import CustomError from '../services/CustomError.js';
 
 export const createCollection = asyncHandler( async (req,res) => {
     const { name } = req.body 
