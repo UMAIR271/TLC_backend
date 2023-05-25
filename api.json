@@ -1,0 +1,126 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "TLC WEBSITE",
+    "description": "TLC WEBSITE is an ecommerce website",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "localhost:5000",
+  "basePath": "/api/v1/",
+  "schemes": ["http"],
+  "paths": {
+    "/auth/signup": {
+      "post": {
+        "summary": "Sign up to TLC website",
+        "description": "Endpoint for user registration",
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "name": "signupData",
+            "in": "body",
+            "description": "User signup details",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string",
+                  "format": "password"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User signed up successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "Login to TLC website",
+        "description": "Endpoint for user login",
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "name": "loginData",
+            "in": "body",
+            "description": "User login details",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string",
+                  "format": "password"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User logged in successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+      }
+    },
+    "/auth/profile": {
+      "get": {
+        "summary": "Get user profile",
+        "description": "Endpoint to retrieve user profile",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User profile retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "get": {
+        "summary": "Get user profile",
+        "description": "Endpoint to retrieve user profile",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Logout completed successfully"
+          }
+        }
+      }
+    }
+  }
+}
