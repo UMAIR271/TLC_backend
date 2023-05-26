@@ -51,9 +51,6 @@ export const deleteCollection = asyncHandler( async (req,res) => {
     if(!collectionId) {
         throw new CustomError('Collection not found',404)
     }
-
-    collectionToDelete.remove()
-
     res.status(200).json({
         success: true,
         message: 'Collection deleted successfully'
