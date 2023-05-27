@@ -7,6 +7,7 @@ import fs from 'fs'
 import cloudinary from "../config/cloudinary.config.js";
 import config from '../config/index.js';
 
+
 export const addProduct = asyncHandler(async (req, res) => {
   const form = formidable({ multiples: true, keepExtensions: true });
 
@@ -34,7 +35,7 @@ export const addProduct = asyncHandler(async (req, res) => {
         folder: config.folderName
       })
       console.log(upload)
-      imageUpload.push({ sucure_url: upload.secure_url , imageName: upload.original_filename })
+      imageUpload.push({ sucure_url: upload.secure_url , public_id: upload.public_id })
     }
     console.log(imageUpload)
     const product = await Product.create({
@@ -81,3 +82,39 @@ export const getProductByCollectionId = asyncHandler(async(req, res) => {
       products
   })
 })
+
+export const getProduct = asyncHandler(async(req, res) => {
+  const product = await Product.find()
+
+  if(!product) {
+    throw new CustomError("No product found", 404)
+  }
+
+  res.status(200).json({
+    success: true,
+    product
+  })
+})
+
+export const deleteProduct = asyncHandler(async (req, res) => {
+  const { id: collectionId } = req.params;
+
+  const product = await Product.findById(collectionId);
+
+  if (!product) {
+    throw new CustomError('No product found', 404);
+  }
+
+  console.log('I am public id', product.photos[0].public_id);
+
+  const deleteResult = await cloudinary.v2.uploader.destroy(
+    product.photos[0].public_id
+  );
+
+  await Product.findByIdAndDelete(collectionId);
+
+  res.status(200).json({
+    success: true,
+    message: 'Product deleted successfully',
+  });
+});
