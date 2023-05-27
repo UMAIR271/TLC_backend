@@ -7,5 +7,4 @@ cloudinary.config({
     api_secret : config.api_secret
 })
 
-console.log(config.api_key)
 export default cloudinary
