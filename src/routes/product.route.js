@@ -6,10 +6,10 @@ import AuthRoles from "../utils/authRole.js";
 
 const router = Router()
 
-router.post("/", isLoggedIn, authorize(AuthRoles.USER), addProduct)
-router.get("/", isLoggedIn, authorize(AuthRoles.USER), getProduct)
-router.get("/:id", isLoggedIn, authorize(AuthRoles.USER), getProductById)
-router.delete("/delete-product/:id", isLoggedIn, authorize(AuthRoles.USER), deleteProduct)
-router.get("/get-by-collection/:id", isLoggedIn, authorize(AuthRoles.USER), getProductByCollectionId)
+router.post("/", isLoggedIn, authorize(AuthRoles.ADMIN), addProduct)
+router.get("/", isLoggedIn, authorize(AuthRoles.ADMIN), getProduct)
+router.get("/:id", isLoggedIn, authorize(AuthRoles.ADMIN), getProductById)
+router.delete("/delete-product/:id", isLoggedIn, authorize(AuthRoles.ADMIN), deleteProduct)
+router.get("/get-by-collection/:id", isLoggedIn, authorize(AuthRoles.ADMIN), getProductByCollectionId)
 
 export default router

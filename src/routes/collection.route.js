@@ -6,9 +6,9 @@ import AuthRoles from "../utils/authRole.js";
 
 const router = Router()
 
-router.post("/", isLoggedIn, authorize(AuthRoles.USER), createCollection)
-router.put("/:id", isLoggedIn, authorize(AuthRoles.USER), updateCollection)
-router.delete("/:id", isLoggedIn, authorize(AuthRoles.USER), deleteCollection)
-router.get("/", isLoggedIn, authorize(AuthRoles.USER), getAllCollections);
+router.post("/", isLoggedIn, authorize(AuthRoles.ADMIN), createCollection)
+router.put("/:id", isLoggedIn, authorize(AuthRoles.ADMIN), updateCollection)
+router.delete("/:id", isLoggedIn, authorize(AuthRoles.ADMIN), deleteCollection)
+router.get("/", isLoggedIn, authorize(AuthRoles.ADMIN), getAllCollections);
 
 export default router
