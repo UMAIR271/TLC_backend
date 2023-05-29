@@ -9,7 +9,7 @@ const router = Router()
 router.post("/signup", signUp)
 router.post("/login", login)
 router.get("/logout", logout)
-router.get("/profile", isLoggedIn, authorize(AuthRole.USER), getProfile)
+router.get("/profile", isLoggedIn, authorize(AuthRole.USER , AuthRole.ADMIN), getProfile)
 
 
 export default router;

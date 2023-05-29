@@ -105,8 +105,6 @@ export const deleteProduct = asyncHandler(async (req, res) => {
     throw new CustomError('No product found', 404);
   }
 
-  console.log('I am public id', product.photos[0].public_id);
-
   const deleteResult = await cloudinary.v2.uploader.destroy(
     product.photos[0].public_id
   );

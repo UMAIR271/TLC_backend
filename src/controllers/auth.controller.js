@@ -8,7 +8,7 @@ export const cookieOptions = {
 }
 
 export const signUp = asyncHandler( async(req,res)=> {
-    const { name, email, password } = req.body
+    const { name, email, password, role } = req.body
 
     if (!name || !email || !password) {
         throw new CustomError("Please add all fields", 400)
@@ -21,7 +21,7 @@ export const signUp = asyncHandler( async(req,res)=> {
     }
 
     const user = await User.create({
-        name,email,password
+        name,email,password,role
     }) 
 
     const token = user.getJWTtoken();
