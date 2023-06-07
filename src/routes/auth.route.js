@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getProfile, login, logout, signUp } from "../controllers/auth.controller.js";
+import { getProfile, login, logout, signUp, forgotPassword, resetPassword } from "../controllers/auth.controller.js";
 import {  isLoggedIn , authorize } from "../middlewares/auth.middleware.js";
 import AuthRole from "../utils/authRole.js";
 
@@ -10,6 +10,7 @@ router.post("/signup", signUp)
 router.post("/login", login)
 router.get("/logout", logout)
 router.get("/profile", isLoggedIn, authorize(AuthRole.USER , AuthRole.ADMIN), getProfile)
-
+router.post("/password/forgot", forgotPassword)
+router.post("/password/reset/:token", resetPassword)
 
 export default router;

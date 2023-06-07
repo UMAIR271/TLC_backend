@@ -26,6 +26,10 @@ const userSchema = new mongoose.Schema({
         enum: Object.values(AuthRoles),
         default: AuthRoles.USER
     },
+    phoneNumber: {
+        type: Number,
+        required: ["true", "Phone number is required"]
+    },
     forgotPasswordToken: String,
     forgotPasswordExpiry: Date
 }, {timestamps: true})

@@ -34,10 +34,9 @@ export const addProduct = asyncHandler(async (req, res) => {
       const upload = await cloudinary.v2.uploader.upload(file.filepath, {
         folder: config.folderName
       })
-      console.log(upload)
       imageUpload.push({ sucure_url: upload.secure_url , public_id: upload.public_id })
     }
-    console.log(imageUpload)
+    
     const product = await Product.create({
       _id: productId,
       photos: imageUpload,
