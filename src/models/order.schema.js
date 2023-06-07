@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import orderStatus from "../utils/orderStatus.js";
 
 const orderSchema = new mongoose.Schema({
-    product: {
+    products: {
         type: [
             {
                 productId: {
@@ -15,7 +15,7 @@ const orderSchema = new mongoose.Schema({
         ],
         required: true
     },
-    user: {
+    userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true
