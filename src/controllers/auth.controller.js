@@ -3,6 +3,7 @@ import asyncHandler from '../services/asyncHandler.js'
 import CustomError from '../services/CustomError.js'
 import mailHelper from '../utils/mailHelper.js'
 import crypto from "crypto"
+import AuthRoles from "../utils/authRole.js";
 
 export const cookieOptions = {
     expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
@@ -170,4 +171,30 @@ export const resetPassword = asyncHandler(async (req, res) => {
 
 
 
+export const updateUserRole = asyncHandler( async (req,res)=> {
+    const { email } = req.body
+    console.log(email)
+    if (!email) {
+        throw new CustomError("Please enter email address",404)
+    }
 
+    const user = await User.findOneAndUpdate(
+        { email }, 
+        { role: AuthRoles.ADMIN },
+        {
+            new: true,
+            runValidators: true,
+        }
+
+    )
+    
+    if (!user) {
+        throw new CustomError("Email not found",404)
+    }
+
+    res.status(200).json({
+        success: true,
+        message: "User role has been updated",
+        user
+      });
+})
