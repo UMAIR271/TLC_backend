@@ -12,6 +12,6 @@ router.get("/logout", logout)
 router.get("/profile", isLoggedIn, authorize(AuthRole.USER , AuthRole.ADMIN), getProfile)
 router.post("/password/forgot", forgotPassword)
 router.post("/password/reset/:token", resetPassword)
-router.put("/updateUserRole",updateUserRole)
+router.put("/updateUserRole",isLoggedIn,updateUserRole)
 
 export default router;
