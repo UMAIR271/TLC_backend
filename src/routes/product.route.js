@@ -11,5 +11,6 @@ router.get("/", isLoggedIn, authorize(AuthRoles.ADMIN), getProduct)
 router.get("/:id", isLoggedIn, authorize(AuthRoles.ADMIN), getProductById)
 router.delete("/delete-product/:id", isLoggedIn, authorize(AuthRoles.ADMIN), deleteProduct)
 router.get("/get-by-collection/:id", isLoggedIn, authorize(AuthRoles.ADMIN), getProductByCollectionId)
+router.put("/favorites/:id",isLoggedIn, addFavorite)
 
 export default router

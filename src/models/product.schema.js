@@ -38,6 +38,10 @@ const productSchema = new mongoose.Schema({
     collectionId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Collection"
+    },
+    favorites:{
+        type: Boolean,
+        default: false
     }
 },{timestamps: true});
 
