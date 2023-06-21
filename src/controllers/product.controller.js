@@ -7,7 +7,6 @@ import fs from 'fs'
 import cloudinary from "../config/cloudinary.config.js";
 import config from '../config/index.js';
 
-
 export const addProduct = asyncHandler(async (req, res) => {
   const form = formidable({ multiples: true, keepExtensions: true });
 
@@ -133,3 +132,17 @@ export const addFavorite = asyncHandler( async( req, res) => {
   })
 
 })
+
+export const searchProduct = asyncHandler(async (req, res) => {
+  const { name } = req.body
+  
+  if(!name) {
+    throw new CustomError("Name required to search",404)
+  }
+  const products = await Product.find({ name: { $regex: name, $options: "i" } });
+
+  res.status(200).json({
+    success: true,
+    products
+  });
+});
