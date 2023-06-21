@@ -3,6 +3,7 @@ import CustomError from '../services/CustomError.js'
 import asyncHandler from '../services/asyncHandler.js'
 
 
+
 export const createCoupon = asyncHandler( async(req, res) => {
     const { discount , code } = req.body
 

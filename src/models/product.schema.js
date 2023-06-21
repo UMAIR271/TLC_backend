@@ -1,11 +1,10 @@
 import mongoose from "mongoose";
-
 const productSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: [true, "Please provide a product name"],
+        required: ["true", "please provide a product name"],
         trim: true,
-        maxLength: [120, "Product should not exceed 120 characters"]
+        maxLength: [120, "product name should not be max than 120 chars"]
     },
     price: {
         type: Number,
@@ -18,10 +17,6 @@ const productSchema = new mongoose.Schema({
     photos: [
         {
             sucure_url: {
-                type: String,
-                required: true
-            },
-            public_id: {
                 type: String,
                 required: true
             }
@@ -38,7 +33,11 @@ const productSchema = new mongoose.Schema({
     collectionId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Collection"
+    },
+    favorites: {
+        type: Boolean,
+        default: false
     }
-},{timestamps: true});
+},{timestamps: true})
 
 export default mongoose.model("Product",productSchema)

@@ -27,8 +27,17 @@ const userSchema = new mongoose.Schema({
         default: AuthRoles.USER
     },
     phoneNumber: {
-        type: Number,
-        required: ["true", "Phone number is required"]
+        type: String,
+        required: [true, "Please enter a valid phone number"]
+    },
+    address: [
+        {
+            type: String
+        }
+    ],
+    profileImage: {
+        type: String,
+        required: false
     },
     forgotPasswordToken: String,
     forgotPasswordExpiry: Date

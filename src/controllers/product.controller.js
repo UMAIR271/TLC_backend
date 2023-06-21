@@ -7,7 +7,6 @@ import fs from 'fs'
 import cloudinary from "../config/cloudinary.config.js";
 import config from '../config/index.js';
 
-
 export const addProduct = asyncHandler(async (req, res) => {
   const form = formidable({ multiples: true, keepExtensions: true });
 
@@ -113,5 +112,37 @@ export const deleteProduct = asyncHandler(async (req, res) => {
   res.status(200).json({
     success: true,
     message: 'Product deleted successfully',
+  });
+});
+
+export const addFavorite = asyncHandler( async( req, res) => {
+  const { id: collectionId } = req.params
+
+  const product = await Product.findById(collectionId)
+  
+  if(!product){
+    throw new CustomError("Product not found",404)
+  }
+
+  product.favorites = !product.favorites
+  await product.save()
+
+  res.status(200).json({
+    product
+  })
+
+})
+
+export const searchProduct = asyncHandler(async (req, res) => {
+  const { name } = req.body
+  
+  if(!name) {
+    throw new CustomError("Name required to search",404)
+  }
+  const products = await Product.find({ name: { $regex: name, $options: "i" } });
+
+  res.status(200).json({
+    success: true,
+    products
   });
 });
