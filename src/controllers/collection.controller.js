@@ -71,3 +71,18 @@ export const createCollection = asyncHandler( async (req,res) => {
         collections
     })
   })
+
+  export const getCollectionById = asyncHandler( async (req,res) => {
+    const { id: collectionId } = req.params
+    
+    if(!collectionId) {
+        throw new CustomError('Collection not found',404)
+    }
+    const collection = await Collection.findById(collectionId)
+  
+    res.status(200).json({
+        success: true,
+        message: 'Collection details',
+        collection 
+    })
+  })
