@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createCollection, deleteCollection, getAllCollections, updateCollection, getCollectionById } from "../controllers/collection.controller.js";
+import { createCollection, deleteCollection, getAllCollections, updateCollection, getCollectionById} from "../controllers/collection.controller.js";
 import {  isLoggedIn, authorize } from "../middlewares/auth.middleware.js";
 import AuthRoles from "../utils/authRole.js";
 
