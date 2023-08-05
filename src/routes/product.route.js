@@ -8,7 +8,7 @@ const router = Router()
 
 router.post("/search", searchProduct)
 router.get("/", getProduct)
-router.post("/", isLoggedIn, authorize(AuthRoles.ADMIN), addProduct)
+router.post("/", addProduct)
 router.get("/:id", isLoggedIn, getProductById)
 router.delete("/delete-product/:id", isLoggedIn, authorize(AuthRoles.ADMIN), deleteProduct)
 router.get("/get-by-collection/:id", isLoggedIn, authorize(AuthRoles.ADMIN), getProductByCollectionId)

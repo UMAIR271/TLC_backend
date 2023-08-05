@@ -6,44 +6,45 @@ import mongoose from 'mongoose';
 import fs from 'fs'
 import cloudinary from "../config/cloudinary.config.js";
 import config from '../config/index.js';
+import multer from 'multer';
+
+const upload = multer({ dest: 'uploads/' });
 
 export const addProduct = asyncHandler(async (req, res) => {
-  const form = formidable({ multiples: true, keepExtensions: true });
-
-  form.parse(req, async function (error, fields, files) {
+  upload.array('photos')(req, res, async function (error) {
     if (error) {
       throw new CustomError(error.message || 'Something went wrong', 500);
     }
 
     let productId = new mongoose.Types.ObjectId().toHexString();
 
-    if (
-      !fields.name ||
-      !fields.price ||
-      !fields.description ||
-      !fields.collectionId
-    ) {
+    if (!req.body.name || !req.body.price || !req.body.description || !req.body.collectionId) {
       throw new CustomError('Please fill all the fields', 400);
     }
-    
-    
+
     let imageUpload = [];
-    for (const fileKey in files) {
-      const file = files[fileKey];
-      const upload = await cloudinary.v2.uploader.upload(file.filepath, {
-        folder: config.folderName
-      })
-      imageUpload.push({ sucure_url: upload.secure_url , public_id: upload.public_id })
-    }
+    for (const file of req.files) {
+      const uploadResult = await cloudinary.v2.uploader.upload(file.path, {
+        folder: config.folderName,
+      });
     
+      imageUpload.push({ secure_url: uploadResult.secure_url, public_id: uploadResult.public_id });
+    }
+
     const product = await Product.create({
       _id: productId,
       photos: imageUpload,
-      ...fields,
+      name: req.body.name,
+      price: req.body.price,
+      description: req.body.description,
+      collectionId: req.body.collectionId,
+      stock: req.body.stock,
     });
+
     if (!product) {
       throw new CustomError('Product failed to be created in DB', 400);
     }
+
     res.status(200).json({
       success: true,
       product,
