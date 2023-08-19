@@ -4,6 +4,7 @@ import Order from '../models/order.schema.js'
 import Product from '../models/product.schema.js'
 import Coupon from '../models/coupon.schema.js'
 import OrderStatus from '../utils/orderStatus.js'
+import mailHelper from '../utils/mailHelper.js'
 
 
 export const createOrder = asyncHandler(async (req, res) => {
@@ -142,3 +143,29 @@ export const updateOrderStatus = asyncHandler(async(req, res) => {
         order
     })
 })
+
+export const sendOrderMail = asyncHandler(async (req, res) => {
+    const { user: loggedInUser } = req;
+    const { email , subject, html } = req.body;
+
+    let selectedUser = null; 
+
+    if (!loggedInUser) {
+        selectedUser = email; 
+    } else {
+        selectedUser = loggedInUser; 
+    }
+
+    const option = {
+        email: selectedUser.email,
+        subject: subject,
+        html: html,
+    };
+
+    await mailHelper(option);
+
+    res.status(200).json({
+        success: true,
+        message:`Mail sent successfully to ${selectedUser.email}`,
+    });
+});
