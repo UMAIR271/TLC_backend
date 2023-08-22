@@ -6,7 +6,7 @@ import Coupon from '../models/coupon.schema.js'
 import OrderStatus from '../utils/orderStatus.js'
 
 
-export const createOrder = asyncHandler(async (req, res) => {
+export const        createOrder = asyncHandler(async (req, res) => {
     const { products, couponCode } = req.body;
     
     if (!products || products.length === 0) {
