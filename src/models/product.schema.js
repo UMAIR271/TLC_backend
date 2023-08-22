@@ -16,7 +16,7 @@ const productSchema = new mongoose.Schema({
     },
     photos: [
         {
-            sucure_url: {
+            secure_url: {
                 type: String,
                 required: true
             }
