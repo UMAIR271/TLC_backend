@@ -15,7 +15,7 @@ const router = Router();
 
 router.post("/search", searchProduct);
 router.get("/", getProduct);
-router.post("/", isLoggedIn, authorize(AuthRoles.ADMIN), addProduct);
+router.post("/", addProduct);
 router.get("/:id", getProductById);
 router.delete(
   "/delete-product/:id",
