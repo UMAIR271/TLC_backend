@@ -1,43 +1,46 @@
 import mongoose from "mongoose";
-const productSchema = new mongoose.Schema({
+const productSchema = new mongoose.Schema(
+  {
     name: {
-        type: String,
-        required: ["true", "please provide a product name"],
-        trim: true,
-        maxLength: [120, "product name should not be max than 120 chars"]
+      type: String,
+      required: ["true", "please provide a product name"],
+      trim: true,
+      maxLength: [120, "product name should not be max than 120 chars"],
     },
     price: {
-        type: Number,
-        required: ["true", "please provide a product price"],
-        maxLength: [5, "product name should not be max than 5 chars"]
+      type: Number,
+      required: ["true", "please provide a product price"],
+      maxLength: [5, "product name should not be max than 5 chars"],
     },
     description: {
-        type: String
+      type: String,
     },
     photos: [
-        {
-            secure_url: {
-                type: String,
-                required: true
-            }
-        }
+      {
+        secure_url: {
+          type: String,
+          required: false,
+        },
+      },
     ],
     stock: {
-        type: Number,
-        default: 0
+      type: Number,
+      default: 0,
     },
     sold: {
-        type: Number,
-        default: 0
+      type: Number,
+      default: 0,
     },
     collectionId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Collection"
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Collection",
     },
     favorites: {
-        type: Boolean,
-        default: false
-    }
-},{timestamps: true})
+      type: Boolean,
+      default: false,
+    },
+  },
+  { timestamps: true }
+);
 
-export default mongoose.model("Product",productSchema)
+export default mongoose.model("Product", productSchema);
