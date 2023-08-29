@@ -21,10 +21,10 @@ export const createOrder = asyncHandler(async (req, res) => {
       const { productId, count } = product;
       const productFromDB = await Product.findById(productId);
       if (!productFromDB) {
-        throw new CustomError("No product found", 400);
+        throw new CustomError("No product found", 404);
       }
       if (productFromDB.stock < count) {
-        return res.status(200).json({
+        return res.status(404).json({
           error: "Product quantity not in stock",
         });
       }
