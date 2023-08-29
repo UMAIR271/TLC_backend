@@ -7,50 +7,49 @@ import OrderStatus from "../utils/orderStatus.js";
 import mailHelper from "../utils/mailHelper.js";
 
 export const createOrder = asyncHandler(async (req, res) => {
-  const { products, couponCode } = req.body;
-
-  if (!products || products.length === 0) {
-    throw new CustomError("No products found", 400);
-  }
-
-  let totalAmount = 0;
-  let discountAmount = 0;
-
-  let productPriceCalc = Promise.all(
-    products.map(async (product) => {
-      const { productId, count } = product;
-      const productFromDB = await Product.findById(productId);
-      if (!productFromDB) {
-        throw new CustomError("No product found", 404);
-      }
-      if (productFromDB.stock < count) {
-        return res.status(404).json({
-          error: "Product quantity not in stock",
-        });
-      }
-      totalAmount += productFromDB.price * count;
-    })
-  );
-
-  await productPriceCalc;
-
-  const coupon = await Coupon.findOne({ code: couponCode });
-
-  if (coupon) {
-    discountAmount = coupon.discount;
-  }
-
-  const orderCreated = {
-    amount: totalAmount - discountAmount,
-    receipt: `receipt_${new Date().getTime()}`,
-  };
-
-  res.status(200).json({
-    success: true,
-    message: "Order created successfully",
-    orderCreated,
+    const { products, couponCode } = req.body;
+  
+    if (!products || products.length === 0) {
+      throw new CustomError("No products found", 400);
+    }
+  
+    let totalAmount = 0;
+    let discountAmount = 0;
+  
+    const productPriceCalc = Promise.all(
+      products.map(async (product) => {
+        const { productId, count } = product;
+        const productFromDB = await Product.findById(productId);
+        if (!productFromDB) {
+          throw new CustomError("No product found", 404);
+        }
+        if (productFromDB.stock < count) {
+          throw new CustomError("Product quantity not in stock", 404);
+        }
+        totalAmount += productFromDB.price * count;
+      })
+    );
+  
+    await productPriceCalc;
+  
+    const coupon = await Coupon.findOne({ code: couponCode });
+  
+    if (coupon) {
+      discountAmount = coupon.discount;
+    }
+  
+    const orderCreated = {
+      amount: totalAmount - discountAmount,
+      receipt: `receipt_${new Date().getTime()}`,
+    };
+  
+    res.status(200).json({
+      success: true,
+      message: "Order created successfully",
+      orderCreated,
+    });
   });
-});
+  
 
 export const placeOrder = asyncHandler(async (req, res) => {
   const {
