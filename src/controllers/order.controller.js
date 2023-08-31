@@ -48,9 +48,8 @@ export const createOrder = asyncHandler(async (req, res) => {
       message: "Order created successfully",
       orderCreated,
     });
-  });
+});
   
-
 export const placeOrder = asyncHandler(async (req, res) => {
   const {
     transactionId,
