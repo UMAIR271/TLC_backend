@@ -5,51 +5,52 @@ import Product from "../models/product.schema.js";
 import Coupon from "../models/coupon.schema.js";
 import OrderStatus from "../utils/orderStatus.js";
 import mailHelper from "../utils/mailHelper.js";
+import sendEmail from "../utils/nodemailer.js";
 
 export const createOrder = asyncHandler(async (req, res) => {
-    const { products, couponCode } = req.body;
-  
-    if (!products || products.length === 0) {
-      throw new CustomError("No products found", 400);
-    }
-  
-    let totalAmount = 0;
-    let discountAmount = 0;
-  
-    const productPriceCalc = Promise.all(
-      products.map(async (product) => {
-        const { productId, count } = product;
-        const productFromDB = await Product.findById(productId);
-        if (!productFromDB) {
-          throw new CustomError("No product found", 404);
-        }
-        if (productFromDB.stock < count) {
-          throw new CustomError("Product quantity not in stock", 404);
-        }
-        totalAmount += productFromDB.price * count;
-      })
-    );
-  
-    await productPriceCalc;
-  
-    const coupon = await Coupon.findOne({ code: couponCode });
-  
-    if (coupon) {
-      discountAmount = coupon.discount;
-    }
-  
-    const orderCreated = {
-      amount: totalAmount - discountAmount,
-      receipt: `receipt_${new Date().getTime()}`,
-    };
-  
-    res.status(200).json({
-      success: true,
-      message: "Order created successfully",
-      orderCreated,
-    });
+  const { products, couponCode } = req.body;
+
+  if (!products || products.length === 0) {
+    throw new CustomError("No products found", 400);
+  }
+
+  let totalAmount = 0;
+  let discountAmount = 0;
+
+  const productPriceCalc = Promise.all(
+    products.map(async (product) => {
+      const { productId, count } = product;
+      const productFromDB = await Product.findById(productId);
+      if (!productFromDB) {
+        throw new CustomError("No product found", 404);
+      }
+      if (productFromDB.stock < count) {
+        throw new CustomError("Product quantity not in stock", 404);
+      }
+      totalAmount += productFromDB.price * count;
+    })
+  );
+
+  await productPriceCalc;
+
+  const coupon = await Coupon.findOne({ code: couponCode });
+
+  if (coupon) {
+    discountAmount = coupon.discount;
+  }
+
+  const orderCreated = {
+    amount: totalAmount - discountAmount,
+    receipt: `receipt_${new Date().getTime()}`,
+  };
+
+  res.status(200).json({
+    success: true,
+    message: "Order created successfully",
+    orderCreated,
+  });
 });
-  
+
 export const placeOrder = asyncHandler(async (req, res) => {
   const {
     transactionId,
@@ -164,27 +165,32 @@ export const updateOrderStatus = asyncHandler(async (req, res) => {
 });
 
 export const sendOrderMail = asyncHandler(async (req, res) => {
-  const { user: loggedInUser } = req;
-  const { email, subject, html } = req.body;
+  try {
+    const { user: loggedInUser } = req;
+    const { email, subject, html } = req.body;
 
-  let selectedUser = null;
+    let selectedUser = null;
 
-  if (!loggedInUser) {
-    selectedUser = email;
-  } else {
-    selectedUser = loggedInUser;
+    if (!loggedInUser) {
+      selectedUser = email;
+    } else {
+      selectedUser = loggedInUser;
+    }
+
+    const option = {
+      email: selectedUser,
+      subject: subject,
+      html: html,
+    };
+
+    // await mailHelper(option);
+    await sendEmail(option);
+
+    res.status(200).json({
+      success: true,
+      message: `Mail sent successfully to ${selectedUser}`,
+    });
+  } catch (e) {
+    res.send(e);
   }
-
-  const option = {
-    email: selectedUser.email,
-    subject: subject,
-    html: html,
-  };
-
-  await mailHelper(option);
-
-  res.status(200).json({
-    success: true,
-    message: `Mail sent successfully to ${selectedUser.email}`,
-  });
 });

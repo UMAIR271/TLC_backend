@@ -17,5 +17,5 @@ router.post("/place-order", placeOrder);
 router.get("/", isLoggedIn, authorize(AuthRoles.ADMIN), getAllOrders);
 router.get("/:id", isLoggedIn, getMyOrders);
 router.patch("/:id", isLoggedIn, authorize(AuthRoles.ADMIN), updateOrderStatus);
-router.post("/send-order-email", isLoggedIn, sendOrderMail);
+router.post("/send-order-email", sendOrderMail);
 export default router;
